@@ -41,6 +41,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+          git pull --rebase origin main
           git add model_config.json release_metadata.json
           git commit -m "update model metadata from Azure ML training" || echo "No metadata changes"
           git push
