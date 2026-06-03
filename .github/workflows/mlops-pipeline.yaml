@@ -82,3 +82,10 @@ jobs:
           sed "s|IMAGE_PLACEHOLDER|$IMAGE|g" k8s/deployment.yaml > k8s/deployment-rendered.yaml
           kubectl apply -f k8s/deployment-rendered.yaml
           kubectl apply -f k8s/service.yaml
+      
+      - name: Verify AKS deployment
+        run: |
+          kubectl get pods -o wide
+          kubectl get svc readmission-api-service
+          kubectl describe svc readmission-api-service
+          kubectl get endpoints readmission-api-service
