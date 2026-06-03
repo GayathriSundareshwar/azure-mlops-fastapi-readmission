@@ -83,9 +83,13 @@ jobs:
           kubectl apply -f k8s/deployment-rendered.yaml
           kubectl apply -f k8s/service.yaml
       
+      - name: Wait for deployment
+        run: |
+          kubectl rollout status deployment/readmission-api --timeout=180s
+      
       - name: Verify AKS deployment
         run: |
           kubectl get pods -o wide
           kubectl get svc readmission-api-service
-          kubectl describe svc readmission-api-service
           kubectl get endpoints readmission-api-service
+      
