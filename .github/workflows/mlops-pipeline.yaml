@@ -67,6 +67,14 @@ jobs:
           --name ${{ secrets.AKS_CLUSTER_NAME }} \
           --overwrite-existing
 
+      - name: Create ACR image pull secret
+        run: |
+          kubectl create secret docker-registry acr-secret \
+            --docker-server=${{ secrets.ACR_NAME }}.azurecr.io \
+            --docker-username=${{ secrets.ACR_USERNAME }} \
+            --docker-password=${{ secrets.ACR_PASSWORD }} \
+            --namespace default \
+            --dry-run=client -o yaml | kubectl apply -f -
 
       - name: Deploy to AKS
         run: |

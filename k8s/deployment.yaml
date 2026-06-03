@@ -17,10 +17,11 @@ spec:
         app: readmission-api
 
     spec:
+      imagePullSecrets:
+      - name: acr-secret
+
       containers:
       - name: readmission-api
-
         image: IMAGE_PLACEHOLDER
-
         ports:
         - containerPort: 8000
