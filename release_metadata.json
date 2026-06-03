@@ -1,8 +1,8 @@
 {
-    "timestamp": "2026-06-03T23:38:39.294764",
-    "git_sha": "de79e1ebfd02deeaa3d9aa64ec2c84fbaf69a17d",
-    "azure_ml_job_name": "loyal_star_8q1gxh6rrn",
+    "timestamp": "2026-06-03T23:48:51.755494",
+    "git_sha": "bb54b9c97c6fe1227d21fa35f29dfec19b3f4de6",
+    "azure_ml_job_name": "dynamic_carnival_7v9ldkrzfj",
     "model_name": "readmission-model",
-    "model_version": "20",
-    "docker_image": "gayuacrmlops123.azurecr.io/hospital-readmission-api:de79e1ebfd02deeaa3d9aa64ec2c84fbaf69a17d"
+    "model_version": "21",
+    "docker_image": "gayuacrmlops123.azurecr.io/hospital-readmission-api:bb54b9c97c6fe1227d21fa35f29dfec19b3f4de6"
 }
