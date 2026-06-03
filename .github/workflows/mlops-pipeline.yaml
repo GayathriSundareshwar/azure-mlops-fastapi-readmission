@@ -93,3 +93,11 @@ jobs:
           kubectl get svc readmission-api-service
           kubectl get endpoints readmission-api-service
       
+      - name: Test API inside AKS
+        run: |
+          kubectl run curl-test \
+            --image=curlimages/curl \
+            --restart=Never \
+            --rm -i \
+            -- curl -v http://readmission-api-service.default.svc.cluster.local/health
+      
