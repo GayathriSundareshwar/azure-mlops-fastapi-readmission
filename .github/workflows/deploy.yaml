@@ -30,6 +30,10 @@ jobs:
           pip install azure-ai-ml azure-identity
 
       - name: Train and register model in Azure ML
+        env:
+          GITHUB_SHA: ${{ github.sha }}
+          ACR_NAME: ${{ secrets.ACR_NAME }}
+
         run: |
           python run_training_and_register.py
 
@@ -37,7 +41,7 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add model_config.json
+          git add model_config.json release_metadata.json
           git commit -m "update model config from Azure ML training" || echo "No model config changes"
           git push
 

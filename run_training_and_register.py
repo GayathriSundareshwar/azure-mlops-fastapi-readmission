@@ -2,6 +2,8 @@ from azure.ai.ml import MLClient, command, Input, Output
 from azure.ai.ml.entities import Environment, Model
 from azure.identity import DefaultAzureCredential
 import json
+import os
+from datetime import datetime   
 
 subscription_id = "297a29d5-77dd-42d6-bd17-a8e3ce2429fe"
 resource_group = "rg-mlops-demo"
@@ -102,3 +104,20 @@ with open("model_config.json", "w") as f:
     json.dump(config, f, indent=4)
 
 print("Saved model_config.json")
+
+git_sha = os.getenv("GITHUB_SHA", "local-run")
+acr_name = os.getenv("ACR_NAME", "local-acr")
+
+release_metadata = {
+    "timestamp": datetime.utcnow().isoformat(),
+    "git_sha": git_sha,
+    "azure_ml_job_name": returned_job.name,
+    "model_name": registered_model.name,
+    "model_version": registered_model.version,
+    "docker_image": f"{acr_name}.azurecr.io/hospital-readmission-api:{git_sha}"
+}
+
+with open("release_metadata.json", "w") as f:
+    json.dump(release_metadata, f, indent=4)
+
+print("Saved release_metadata.json")
