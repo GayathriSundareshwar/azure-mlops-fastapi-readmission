@@ -7,8 +7,9 @@ on:
 
 permissions:
   contents: write
+
 jobs:
-  train-register-build-push:
+  mlops-pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,16 +34,15 @@ jobs:
         env:
           GITHUB_SHA: ${{ github.sha }}
           ACR_NAME: ${{ secrets.ACR_NAME }}
-
         run: |
           python run_training_and_register.py
 
-      - name: Commit updated model_config.json
+      - name: Commit updated model metadata
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add model_config.json release_metadata.json
-          git commit -m "update model config from Azure ML training" || echo "No model config changes"
+          git commit -m "update model metadata from Azure ML training" || echo "No metadata changes"
           git push
 
       - name: Login to ACR
@@ -59,3 +59,24 @@ jobs:
         run: |
           docker push \
           ${{ secrets.ACR_NAME }}.azurecr.io/hospital-readmission-api:${{ github.sha }}
+
+      - name: Get AKS credentials
+        run: |
+          az aks get-credentials \
+          --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} \
+          --name ${{ secrets.AKS_CLUSTER_NAME }} \
+          --overwrite-existing
+
+      - name: Attach ACR to AKS
+        run: |
+          az aks update \
+          --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} \
+          --name ${{ secrets.AKS_CLUSTER_NAME }} \
+          --attach-acr ${{ secrets.ACR_NAME }}
+
+      - name: Deploy to AKS
+        run: |
+          IMAGE=${{ secrets.ACR_NAME }}.azurecr.io/hospital-readmission-api:${{ github.sha }}
+          sed "s|IMAGE_PLACEHOLDER|$IMAGE|g" k8s/deployment.yaml > k8s/deployment-rendered.yaml
+          kubectl apply -f k8s/deployment-rendered.yaml
+          kubectl apply -f k8s/service.yaml
