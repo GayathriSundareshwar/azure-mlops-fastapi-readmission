@@ -1,8 +1,8 @@
 {
-    "timestamp": "2026-06-03T21:39:08.569883",
-    "git_sha": "c38cb6f92ff1f5a7f13c24256ef05d4b7518b239",
-    "azure_ml_job_name": "placid_jewel_zfc81xj4sg",
+    "timestamp": "2026-06-03T22:12:29.692441",
+    "git_sha": "c22275fd7c4502221fe72aef13e92774a28424a9",
+    "azure_ml_job_name": "loving_button_ysmk521jfy",
     "model_name": "readmission-model",
-    "model_version": "13",
-    "docker_image": "gayuacrmlops123.azurecr.io/hospital-readmission-api:c38cb6f92ff1f5a7f13c24256ef05d4b7518b239"
+    "model_version": "17",
+    "docker_image": "gayuacrmlops123.azurecr.io/hospital-readmission-api:c22275fd7c4502221fe72aef13e92774a28424a9"
 }
