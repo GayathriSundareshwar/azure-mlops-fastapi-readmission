@@ -67,12 +67,6 @@ jobs:
           --name ${{ secrets.AKS_CLUSTER_NAME }} \
           --overwrite-existing
 
-      - name: Attach ACR to AKS
-        run: |
-          az aks update \
-          --resource-group ${{ secrets.AKS_RESOURCE_GROUP }} \
-          --name ${{ secrets.AKS_CLUSTER_NAME }} \
-          --attach-acr ${{ secrets.ACR_NAME }}
 
       - name: Deploy to AKS
         run: |
