@@ -1,4 +1,4 @@
-name: Azure MLOps CI/CD
+name: Azure MLOps Full Pipeline
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-push-image:
+  train-register-build-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +17,27 @@ jobs:
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: |
+          pip install azure-ai-ml azure-identity
+
+      - name: Train and register model in Azure ML
+        run: |
+          python run_training_and_register.py
+
+      - name: Commit updated model_config.json
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add model_config.json
+          git commit -m "update model config from Azure ML training" || echo "No model config changes"
+          git push
 
       - name: Login to ACR
         run: |
@@ -32,8 +53,3 @@ jobs:
         run: |
           docker push \
           ${{ secrets.ACR_NAME }}.azurecr.io/hospital-readmission-api:${{ github.sha }}
-
-      - name: Show image pushed
-        run: |
-          echo "Image pushed:"
-          echo "${{ secrets.ACR_NAME }}.azurecr.io/hospital-readmission-api:${{ github.sha }}"
