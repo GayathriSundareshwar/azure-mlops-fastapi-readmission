@@ -99,5 +99,5 @@ jobs:
             --image=curlimages/curl \
             --restart=Never \
             --rm -i \
-            -- curl -v http://readmission-api-service.default.svc.cluster.local/health
+            -- curl -v http://readmission-api-service.default.svc.cluster.local:8000/health
       
