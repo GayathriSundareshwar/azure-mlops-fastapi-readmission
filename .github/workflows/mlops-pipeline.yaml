@@ -75,7 +75,14 @@ jobs:
             --docker-password=${{ secrets.ACR_PASSWORD }} \
             --namespace default \
             --dry-run=client -o yaml | kubectl apply -f -
-
+      - name: Create Azure credential secret for pod
+        run: |
+          kubectl create secret generic azure-credentials \
+            --from-literal=client-id=${{ secrets.AZURE_CLIENT_ID }} \
+            --from-literal=tenant-id=${{ secrets.AZURE_TENANT_ID }} \
+            --from-literal=client-secret=${{ secrets.AZURE_CLIENT_SECRET }} \
+            --namespace default \
+            --dry-run=client -o yaml | kubectl apply -f -
       - name: Deploy to AKS
         run: |
           IMAGE=${{ secrets.ACR_NAME }}.azurecr.io/hospital-readmission-api:${{ github.sha }}
