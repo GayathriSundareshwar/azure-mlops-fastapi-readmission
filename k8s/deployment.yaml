@@ -20,7 +20,7 @@ spec:
       imagePullSecrets:
       - name: acr-secret
 
-    containers:
+      containers:
       - name: readmission-api
         image: IMAGE_PLACEHOLDER
         ports:
